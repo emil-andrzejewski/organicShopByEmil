@@ -9,17 +9,23 @@
         <li class="nav-item active">
             <a class="nav-link" routerLink="/shopping-cart">Shopping cart <span class="sr-only">(current)</span></a>
         </li>
-        <li ngbDropdown class="nav-item dropdown">
+        <li class="nav-item" *ngIf="!user">
+            <a class="nav-link" routerLink="/login">Login<span class="sr-only">(current)</span></a>
+        </li>
+        <li ngbDropdown class="nav-item dropdown" *ngIf="user" >
             <a ngbDropdownToggle class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Username
+              {{user.displayName}}
             </a>
             <div ngbDropdownMenu class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" routerLink="/my-orders">My orders</a>
               <a class="dropdown-item" routerLink="/admin/products">Manage products</a>
               <a class="dropdown-item" routerLink="/admin/orders">Manage orders</a>
-              <a class="dropdown-item" >Log out</a>
+              <a class="dropdown-item" (click)="logout()">Log out</a>
             </div>
-          </li>
+        </li>
+        <!-- <li class="nav-item">
+            {{isLogged}}
+        </li> -->
       </ul>
     </div>
   </nav>
