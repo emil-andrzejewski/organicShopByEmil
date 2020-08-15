@@ -1,29 +1,38 @@
-import { Component, OnInit, Output } from '@angular/core';
-import * as firebase from 'firebase';
-import { AngularFireAuth } from "@angular/fire/auth";
+import { AuthService } from './../services/auth.service';
+import { Component, Output, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent  {
-  @Output('isLogged') isLogged: boolean = false;
-  user;
+export class LoginComponent implements OnDestroy {
+  sub: Subscription;
 
-  constructor(private afAuth: AngularFireAuth) { }
+  constructor(
+    private auth: AuthService,
+    private router: Router
+  ) { }
+
+  ngOnDestroy() {
+    if(this.sub) this.sub.unsubscribe();
+  }
 
   login(){
-    this.afAuth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
-    this.isLogged = true;
+    this.auth.login();
+    this.sub = this.auth.user$.subscribe(user => {
+      if(user) this.router.navigate(['/']);
+    })
   }
 
-  checkIfIsLogged(){
-    this.afAuth.authState.subscribe(user=> {
-      this.user = user;
-    });
-    if(this.user) {
-      console.log(this.user);
-    }
-  }
+  // checkIfIsLogged(){
+  //   this.afAuth.authState.subscribe(user=> {
+  //     this.user = user;
+  //   });
+  //   if(this.user) {
+  //     console.log(this.user);
+  //   }
+  // }
 }
