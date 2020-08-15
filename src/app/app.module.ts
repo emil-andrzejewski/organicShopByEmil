@@ -1,3 +1,5 @@
+import { UserService } from './services/user.service';
+import { AuthGuardService } from './services/auth-guard.service';
 import { AuthService } from './services/auth.service';
 import { environment } from './../environments/environment';
 import { BrowserModule } from '@angular/platform-browser';
@@ -60,18 +62,22 @@ import { OrderSuccessComponent } from './order-success/order-success.component';
     NgbModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent },
-      { path: 'order-success', component: OrderSuccessComponent },
-      { path: 'check-out', component: CheckOutComponent },
       { path: 'products', component: ProductsComponent },
       { path: 'shopping-cart', component: ShoppingCartComponent },
       { path: 'login', component: LoginComponent },
-      { path: 'my-orders', component: MyOrdersComponent },
-      { path: 'admin/products', component: AdminProductsComponent },
-      { path: 'admin/orders', component: AdminOrdersComponent }
+
+      { path: 'order-success', component: OrderSuccessComponent, canActivate: [AuthGuardService] },
+      { path: 'check-out', component: CheckOutComponent, canActivate: [AuthGuardService] },
+      { path: 'my-orders', component: MyOrdersComponent, canActivate: [AuthGuardService] },
+
+      { path: 'admin/products', component: AdminProductsComponent, canActivate: [AuthGuardService] },
+      { path: 'admin/orders', component: AdminOrdersComponent, canActivate: [AuthGuardService] }
     ])
   ],
   providers: [
-    AuthService
+    AuthService,
+    AuthGuardService,
+    UserService
   ],
   bootstrap: [AppComponent]
 })

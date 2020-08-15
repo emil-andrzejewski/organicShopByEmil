@@ -21,8 +21,8 @@ export class BsNavbarComponent implements OnDestroy {
     this.sub = this.auth.user$.subscribe(user => 
     {
       this.user = user;
-      if(user) router.navigate(['/']); 
-      else router.navigate(['/login']); 
+      // if(user) router.navigate(['/']); 
+      // else router.navigate(['/login']); 
     });
   }
 
