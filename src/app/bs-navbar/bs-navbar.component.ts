@@ -1,3 +1,4 @@
+import { AppUser } from './../models/app-user';
 import { AuthService } from './../services/auth.service';
 import { Router } from '@angular/router';
 import { Component, OnDestroy } from '@angular/core';
@@ -11,18 +12,16 @@ import { Subscription } from 'rxjs';
 })
 export class BsNavbarComponent implements OnDestroy {
   isLogged: boolean = false;
-  user: firebase.User;
   sub: Subscription;
+  appUser: AppUser;
 
   constructor(
     private auth: AuthService,
     private router: Router  
   ) { 
-    this.sub = this.auth.user$.subscribe(user => 
+    this.sub = this.auth.appUser$.subscribe(user => 
     {
-      this.user = user;
-      // if(user) router.navigate(['/']); 
-      // else router.navigate(['/login']); 
+      this.appUser = user;
     });
   }
 
