@@ -9,8 +9,7 @@ import { CanActivate, Router, RouterStateSnapshot, ActivatedRoute } from '@angul
 export class AuthGuardService implements CanActivate {
   constructor(
     private auth: AuthService,
-    private router: Router,
-    private route: ActivatedRoute  
+    private router: Router 
   ) { }
 
   canActivate(route,state: RouterStateSnapshot) {
