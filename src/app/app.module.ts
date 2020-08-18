@@ -1,3 +1,4 @@
+import { ProductService } from './services/product.service';
 import { AdminAuthGuardService } from './services/admin-auth-guard.service';
 import { UserService } from './services/user.service';
 import { AuthGuardService } from './services/auth-guard.service';
@@ -15,12 +16,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-import { MatMenuModule } from "@angular/material/menu";
+import { MatComponentsModule } from "./mat-components.module";
 import { BsNavbarComponent } from './bs-navbar/bs-navbar.component';
 import { ProductsComponent } from './products/products.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
@@ -31,6 +27,10 @@ import { AdminOrdersComponent } from './admin/admin-orders/admin-orders.componen
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { OrderSuccessComponent } from './order-success/order-success.component';
+import { ProductFormComponent } from './admin/product-form/product-form.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { CategoryService } from './services/category.service';
+import { CustomFormsModule } from "ng2-validation";
 
 @NgModule({
   declarations: [
@@ -44,7 +44,8 @@ import { OrderSuccessComponent } from './order-success/order-success.component';
     AdminOrdersComponent,
     HomeComponent,
     LoginComponent,
-    OrderSuccessComponent
+    OrderSuccessComponent,
+    ProductFormComponent
   ],
   imports: [
     BrowserModule,
@@ -54,13 +55,11 @@ import { OrderSuccessComponent } from './order-success/order-success.component';
     AngularFireDatabaseModule,
     BrowserAnimationsModule,
     LayoutModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
-    MatMenuModule,
+    MatComponentsModule,
     NgbModule,
+    ReactiveFormsModule,
+    FormsModule,
+    CustomFormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent },
       { path: 'products', component: ProductsComponent },
@@ -71,15 +70,31 @@ import { OrderSuccessComponent } from './order-success/order-success.component';
       { path: 'check-out', component: CheckOutComponent, canActivate: [AuthGuardService] },
       { path: 'my-orders', component: MyOrdersComponent, canActivate: [AuthGuardService] },
 
-      { path: 'admin/products', component: AdminProductsComponent, canActivate: [AuthGuardService,AdminAuthGuardService] },
-      { path: 'admin/orders', component: AdminOrdersComponent, canActivate: [AuthGuardService,AdminAuthGuardService] }
+      { 
+        path: 'admin/products/new', 
+        component: ProductFormComponent, 
+        // canActivate: [AuthGuardService,AdminAuthGuardService] 
+      },
+      { 
+        path: 'admin/products', 
+        component: AdminProductsComponent, 
+        canActivate: [AuthGuardService,AdminAuthGuardService] 
+      },
+      { 
+        path: 'admin/orders', 
+        component: AdminOrdersComponent, 
+        canActivate: [AuthGuardService,AdminAuthGuardService] 
+      },
+      
     ])
   ],
   providers: [
     AuthService,
     AuthGuardService,
     AdminAuthGuardService,
-    UserService
+    UserService,
+    CategoryService,
+    ProductService
   ],
   bootstrap: [AppComponent]
 })
