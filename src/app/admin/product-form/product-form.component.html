@@ -15,7 +15,7 @@
                 <mat-error
                     *ngIf="formControls.price.errors && formControls.price.touched"    
                 >{{ priceErrorInfo() }}</mat-error>
-                <span matPrefix>$&nbsp;</span>
+                <span matPrefix>€&nbsp;</span>
             </mat-form-field>
             <br>
             <mat-form-field appearance="fill">
@@ -53,7 +53,7 @@
             </mat-card-header>
             <img mat-card-image [src]="formControls.imageUrl.value">
             <mat-card-content>
-              <p>{{ formControls.price.value | currency:'USD' }}</p>
+              <p>{{ formControls.price.value | currency:'EUR' }}</p>
             </mat-card-content>
         </mat-card>
     </div>

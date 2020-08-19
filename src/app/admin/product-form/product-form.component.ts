@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Product } from './../../models/product';
 import { ProductService } from './../../services/product.service';
 import { Subscription, Observable } from 'rxjs';
@@ -25,7 +26,8 @@ export class ProductFormComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private categoryService: CategoryService,
-    private productService: ProductService
+    private productService: ProductService,
+    private router: Router
   ) {
     this.categories$ = categoryService.categories;
   }
@@ -39,6 +41,7 @@ export class ProductFormComponent implements OnInit, OnDestroy {
   saveProduct() {
     let newProduct: Product = this.newProductForm.value;
     this.productService.create(newProduct);
+    this.router.navigateByUrl('/admin/products');
   }
 
   priceErrorInfo() {
