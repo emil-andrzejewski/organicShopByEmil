@@ -6,6 +6,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from "@angular/material/input";
 import { MatGridListModule } from "@angular/material/grid-list";
 import { MatCardModule } from "@angular/material/card";
+import { MatSortModule } from "@angular/material/sort";
+import { MatPaginatorModule } from "@angular/material/paginator";
 
 
 @NgModule({
@@ -16,7 +18,9 @@ import { MatCardModule } from "@angular/material/card";
     MatSelectModule,
     MatInputModule,
     MatGridListModule,
-    MatCardModule
+    MatCardModule,
+    MatSortModule,
+    MatPaginatorModule
   ]
 })
 export class MatComponentsModule { }

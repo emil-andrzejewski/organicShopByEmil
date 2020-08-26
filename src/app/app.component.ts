@@ -20,7 +20,7 @@ export class AppComponent {
 
         router.navigateByUrl(localStorage.getItem('returnUrl'));
       } 
-      router.navigateByUrl('/admin/products/new'); //do testów
+      router.navigateByUrl('/admin/products'); //do testów
     })
   }
 }

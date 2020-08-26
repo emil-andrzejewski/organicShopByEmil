@@ -22,7 +22,7 @@
                 <mat-label>Select Category</mat-label>
                 <mat-select matNativeControl formControlName="category" required>
                     <mat-option></mat-option>
-                    <mat-option *ngFor="let c of categories$ | async" [value]="c.name" >{{c.title}}</mat-option>
+                    <mat-option *ngFor="let c of categories$ | async" [value]="c" >{{c.title}}</mat-option>
                 </mat-select>
                 <mat-error
                     *ngIf="formControls.category.errors && formControls.category.touched"    
@@ -49,7 +49,7 @@
         <mat-card class="example-card">
             <mat-card-header>
               <mat-card-title>{{ formControls.title.value }}</mat-card-title>
-              <mat-card-subtitle>{{ formControls.category.value }}</mat-card-subtitle>
+              <mat-card-subtitle>{{ formControls.category.value.title}}</mat-card-subtitle>
             </mat-card-header>
             <img mat-card-image [src]="formControls.imageUrl.value">
             <mat-card-content>
@@ -57,5 +57,8 @@
             </mat-card-content>
         </mat-card>
     </div>
+</div>
+<div>
+    {{categories$ | async | json}}
 </div>
 

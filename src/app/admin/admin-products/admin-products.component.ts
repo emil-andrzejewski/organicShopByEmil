@@ -1,24 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
+import { Observable } from 'rxjs';
+import { ProductService } from './../../services/product.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Product } from 'src/app/models/product';
+import { MatSort } from '@angular/material/sort'
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-admin-products',
@@ -26,12 +13,33 @@ const ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./admin-products.component.css']
 })
 export class AdminProductsComponent implements OnInit {
-  displayedColumns: string[] = ['position', 'title', 'price', 'edit'];
-  dataSource = ELEMENT_DATA;
+  displayedColumns: string[] = ['title', 'price', 'edit'];
+  products: MatTableDataSource<Product[]>
+  @ViewChild (MatSort,{static: true}) sort: MatSort
+  @ViewChild (MatPaginator) paginator: MatPaginator
   
-  constructor() { }
+  constructor(
+    private productService: ProductService
+  ) { }
 
   ngOnInit(): void {
+    this.productService.getAll().subscribe(products => {
+      this.products = new MatTableDataSource
+      products.forEach(elem => {
+        let p = elem.payload.toJSON()
+        p['$key'] = elem.key
+        this.products.data.push(JSON.parse(JSON.stringify(p)))
+      });
+      this.products.sort = this.sort
+      this.products.paginator = this.paginator
+      console.log('Loaded '+ this.products.data.length + ' clients');
+    },
+    error => console.log('Error: ' + error));
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.products.filter = filterValue.trim().toLowerCase();
   }
 
 }

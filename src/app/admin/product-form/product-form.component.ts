@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { Product } from './../../models/product';
-import { ProductService } from './../../services/product.service';
+import { ProductService as ProductService } from './../../services/product.service';
 import { Subscription, Observable } from 'rxjs';
 import { CategoryService } from './../../services/category.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
@@ -29,7 +29,7 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     private productService: ProductService,
     private router: Router
   ) {
-    this.categories$ = categoryService.categories;
+    this.categories$ = categoryService.getAll();
   }
 
   ngOnInit(): void {
