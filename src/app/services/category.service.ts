@@ -1,5 +1,3 @@
-import { Category } from './../models/category';
-import { Observable } from 'rxjs';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { Injectable } from '@angular/core';
 
@@ -8,9 +6,14 @@ import { Injectable } from '@angular/core';
 })
 export class CategoryService {
 
+
   constructor(private db: AngularFireDatabase) { }
 
-  getAll(): Observable<Category[]> {
-    return this.db.list('/categories').valueChanges() as Observable<Category[]>;
+  getAll()/* : Observable<Category[]> */ {
+    return this.db.list('/categories').snapshotChanges() /*  as Observable<Category[]>; */
+  }
+
+  get(id) {
+    return this.db.object('categories/'+id).valueChanges()
   }
 }

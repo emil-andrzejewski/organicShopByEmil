@@ -14,7 +14,7 @@ import { JsonPipe } from '@angular/common';
 })
 export class AdminProductsComponent implements OnInit {
   displayedColumns: string[] = ['title', 'price', 'edit'];
-  products: MatTableDataSource<Product[]>
+  products: MatTableDataSource<any>
   @ViewChild (MatSort,{static: true}) sort: MatSort
   @ViewChild (MatPaginator) paginator: MatPaginator
   
@@ -32,7 +32,7 @@ export class AdminProductsComponent implements OnInit {
       });
       this.products.sort = this.sort
       this.products.paginator = this.paginator
-      console.log('Loaded '+ this.products.data.length + ' clients');
+      // console.log('Loaded '+ this.products.data.length + ' clients');
     },
     error => console.log('Error: ' + error));
   }

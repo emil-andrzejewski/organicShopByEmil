@@ -1,9 +1,9 @@
 <div class="row">
     <div class="col-md-6">
-        <form [formGroup]="newProductForm">
+        <form [formGroup]="productForm">
             <mat-form-field appearance="fill">
                 <mat-label>Title</mat-label>
-                <input matInput formControlName="title" required cdkFocusInitial>
+                <input matInput formControlName="title" required cdkFocusInitial >
                 <mat-error
                     *ngIf="formControls.title.errors && formControls.title.touched"    
                 >Title is required</mat-error>
@@ -11,18 +11,23 @@
             <br>
             <mat-form-field appearance="fill">
                 <mat-label>Price</mat-label>
-                <input matInput type="number" formControlName="price" required>
-                <mat-error
-                    *ngIf="formControls.price.errors && formControls.price.touched"    
-                >{{ priceErrorInfo() }}</mat-error>
+                <input matInput type="number" formControlName="price" required >
+                <mat-error *ngIf="formControls.price.errors && formControls.price.touched">
+                    <div *ngIf="formControls.price.errors.required">
+                        Price is required.
+                    </div>
+                    <div *ngIf="formControls.price.errors.min">
+                        Price must be higher than 0.
+                    </div>
+                </mat-error>
                 <span matPrefix>€&nbsp;</span>
             </mat-form-field>
             <br>
             <mat-form-field appearance="fill">
                 <mat-label>Select Category</mat-label>
-                <mat-select matNativeControl formControlName="category" required>
+                <mat-select formControlName="category" required [(value)]="category">
                     <mat-option></mat-option>
-                    <mat-option *ngFor="let c of categories$ | async" [value]="c" >{{c.title}}</mat-option>
+                    <mat-option *ngFor="let c of categories" [value]="c.key" >{{c.payload.title}}</mat-option>
                 </mat-select>
                 <mat-error
                     *ngIf="formControls.category.errors && formControls.category.touched"    
@@ -31,7 +36,7 @@
             <br>
             <mat-form-field appearance="fill">
                 <mat-label>Image Url</mat-label>
-                <input matInput formControlName="imageUrl" required url>
+                <input matInput formControlName="imageUrl" required url >
                 <mat-error *ngIf="formControls.imageUrl.errors && formControls.imageUrl.touched">
                     <div *ngIf="formControls.imageUrl.errors.required">
                         Image URL is required
@@ -42,14 +47,15 @@
                 </mat-error>
             </mat-form-field>
             <br>
-            <button mat-raised-button color="primary" [disabled]="newProductForm.invalid" (click)="saveProduct()">Save</button>
+            <button mat-raised-button color="primary" [disabled]="productForm.invalid" (click)="saveProduct()">Save</button>
+            <button mat-raised-button color="accent" *ngIf="id" (click)="deleteProduct()">Delete</button>
         </form>        
     </div>
     <div class="col-md-6">
         <mat-card class="example-card">
             <mat-card-header>
               <mat-card-title>{{ formControls.title.value }}</mat-card-title>
-              <mat-card-subtitle>{{ formControls.category.value.title}}</mat-card-subtitle>
+              <!-- <mat-card-subtitle>{{ product.category }}</mat-card-subtitle> -->
             </mat-card-header>
             <img mat-card-image [src]="formControls.imageUrl.value">
             <mat-card-content>
@@ -57,8 +63,7 @@
             </mat-card-content>
         </mat-card>
     </div>
+
 </div>
-<div>
-    {{categories$ | async | json}}
-</div>
+
 

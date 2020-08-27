@@ -1,11 +1,12 @@
-import { Router } from '@angular/router';
-import { Product } from './../../models/product';
+import { Product } from 'src/app/models/product';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ProductService as ProductService } from './../../services/product.service';
 import { Subscription, Observable } from 'rxjs';
 import { CategoryService } from './../../services/category.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Category } from 'src/app/models/category';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-product-form',
@@ -13,46 +14,69 @@ import { Category } from 'src/app/models/category';
   styleUrls: ['./product-form.component.css']
 })
 export class ProductFormComponent implements OnInit, OnDestroy {
-  newProductForm = this.fb.group({
-    title: ['',],
+  productForm = this.fb.group({
+    title: ['',Validators.required],
     price: ['',[Validators.min(0)]],
-    category: [''],
-    imageUrl: ['']
+    category: ['',Validators.required],
+    imageUrl: ['',Validators.required]
   });
-  categories$: Observable<Category[]>  //: Category[]; //list of product categories
-  sub: Subscription; 
-  formControls = this.newProductForm.controls;
+  sub1: Subscription; 
+  sub2: Subscription; 
+  formControls = this.productForm.controls;
+  categories;
+  category;
+  id;
 
   constructor(
     private fb: FormBuilder,
     private categoryService: CategoryService,
     private productService: ProductService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {
-    this.categories$ = categoryService.getAll();
+    // this.categories$ = categoryService.getAll();
+    this.sub1 = categoryService.getAll().subscribe(x=> {
+      this.categories = JSON.parse(JSON.stringify(x));
+    })
+
+    this.id = route.snapshot.paramMap.get('id')
+    if(this.id) {
+      this.sub2 = productService.get(this.id).subscribe(p => {
+        this.productForm.setValue(p)
+        // this.product = JSON.parse(JSON.stringify(p))
+        this.category = this.formControls.category.value
+      })
+    }
   }
 
   ngOnInit(): void {
   }
 
   ngOnDestroy() {
+    if(this.sub1) this.sub1.unsubscribe()
+    if(this.sub2) this.sub2.unsubscribe()
   }
 
   saveProduct() {
-    let newProduct: Product = this.newProductForm.value;
-    this.productService.create(newProduct);
-    this.router.navigateByUrl('/admin/products');
+    if(this.id) { //if editing a product
+      this.productService.update(this.id,this.productForm.value)
+    }
+    else {    // defining new product
+      this.productService.create(this.productForm.value);
+    }
+    this.router.navigateByUrl('/admin/products');  
   }
 
-  priceErrorInfo() {
-    let errorInfo='';
-    if(this.formControls.price.errors.required) {
-      errorInfo+='Price is required. '
+  deleteProduct() {
+    if(confirm('Are you sure?')) {
+      if(this.sub2) this.sub2.unsubscribe()
+      this.productService.remove(this.id)
+      this.router.navigateByUrl('/admin/products')
     }
-    if(this.formControls.price.errors.min) {
-      errorInfo+='Price must be higher than 0. '
-    }   
-    return errorInfo;
+  }
+
+  getCategory(id) {
+    return this.categoryService.get(id) as Observable<Category>
   }
 
 }
