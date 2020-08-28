@@ -13,7 +13,7 @@ import { JsonPipe } from '@angular/common';
   styleUrls: ['./admin-products.component.css']
 })
 export class AdminProductsComponent implements OnInit {
-  displayedColumns: string[] = ['title', 'price', 'edit'];
+  displayedColumns: string[] = ['title', 'price', 'category', 'edit'];
   products: MatTableDataSource<any>
   @ViewChild (MatSort,{static: true}) sort: MatSort
   @ViewChild (MatPaginator) paginator: MatPaginator

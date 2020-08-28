@@ -1,1 +1,37 @@
-<p>products works!</p>
+
+<!-- <ul>
+  <li *ngFor="let p of products">{{p.payload | json}}</li>
+</ul> -->
+
+<div class="row">
+  <div class="col-md-2">
+    <div class="list-group">
+      <a routerLink="/" class="list-group-item list-group-item-action" [class.active]="!activeCategory" >
+        All categories
+      </a>
+      <a *ngFor="let c of categories" routerLink="/" [queryParams]="{ category: c.key }" 
+        class="list-group-item list-group-item-action" [class.active]="activeCategory === c.key">
+        {{c.payload.title}}
+      </a>
+    </div>
+  </div>
+  <div class="col-md-10">
+    <mat-grid-list cols="2" rowHeight="1:1.2">
+      <mat-grid-tile *ngFor="let p of filteredProducts; let i = index">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>{{ p.payload.title }}</mat-card-title>
+            <!-- <mat-card-subtitle>{{ product.category }}</mat-card-subtitle> -->
+          </mat-card-header>
+          <img mat-card-image [src]="p.payload.imageUrl">
+          <mat-card-content>
+            <p>{{ p.payload.price | currency:'EUR' }}</p>
+          </mat-card-content>
+          <button mat-raised-button color="primary">Add to Cart</button>
+        </mat-card>
+        <div class="w-100"></div>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+</div>
+

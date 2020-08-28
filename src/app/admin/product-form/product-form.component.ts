@@ -1,4 +1,3 @@
-import { Product } from 'src/app/models/product';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ProductService as ProductService } from './../../services/product.service';
 import { Subscription, Observable } from 'rxjs';
@@ -35,7 +34,7 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute
   ) {
     // this.categories$ = categoryService.getAll();
-    this.sub1 = categoryService.getAll().subscribe(x=> {
+    this.sub1 = categoryService.getAll().pipe(take(1)).subscribe(x=> {
       this.categories = JSON.parse(JSON.stringify(x));
     })
 
