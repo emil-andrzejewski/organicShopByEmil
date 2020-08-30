@@ -1,11 +1,9 @@
-import { Observable } from 'rxjs';
 import { ProductService } from './../../services/product.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Product } from 'src/app/models/product';
 import { MatSort } from '@angular/material/sort'
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-admin-products',

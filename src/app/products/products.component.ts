@@ -1,3 +1,4 @@
+import { ShoppingCartService } from './../services/shopping-cart.service';
 import { Product } from 'src/app/models/product';
 import { ProductService } from './../services/product.service';
 import { CategoryService } from './../services/category.service';
@@ -22,7 +23,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
   constructor(
     private categoryService: CategoryService,
     private productService: ProductService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private cartService: ShoppingCartService
   ) {
     this.subs.push(this.categoryService.getAll().pipe(take(1)).subscribe(c => 
       this.categories = JSON.parse(JSON.stringify(c))
@@ -59,6 +61,10 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   filterProducts(category): void {
     // this.filteredProducts = this.products.filter(p => p.payload.category===category)
+  }
+
+  addToCart(product) {
+    this.cartService.create(product)
   }
 
 }

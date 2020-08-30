@@ -1,3 +1,4 @@
+import { ShoppingCartService } from './../services/shopping-cart.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,10 +7,21 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./shopping-cart.component.css']
 })
 export class ShoppingCartComponent implements OnInit {
+items: any[] = []
+displayedColumns: string[] = ['productName', 'quantity', 'unitPrice', 'price'];
 
-  constructor() { }
+  constructor(private cartService: ShoppingCartService) { }
 
   ngOnInit(): void {
   }
 
+  getTotalCost(): number {
+    if(this.items.length===0) return 0
+
+    //else count totalprice
+  }
+
+  clearCart(): void {
+
+  }
 }

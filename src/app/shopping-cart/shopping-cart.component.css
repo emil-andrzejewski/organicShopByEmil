@@ -1,0 +1,18 @@
+table {
+  width: 100%;
+}
+
+
+
+tr.mat-footer-row {
+  font-weight: bold;
+}
+
+.mat-footer-cell {
+  border-top: 1px solid black;
+}
+
+.mat-header-cell {
+  font-weight: bold;
+  border-bottom: 1px solid grey;
+}

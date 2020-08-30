@@ -5,7 +5,7 @@
 
 <div class="row">
   <div class="col-md-2">
-    <div class="list-group">
+    <div class="list-group sticky-top">
       <a routerLink="/" class="list-group-item list-group-item-action" [class.active]="!activeCategory" >
         All categories
       </a>
@@ -25,7 +25,7 @@
               <div class="card-body">
                 <h1 class="card-title">{{p.payload.title}}</h1>
                 <p class="card-text">{{ p.payload.price | currency:'EUR' }}</p>
-                <button mat-raised-button color="primary">Add to Cart</button>
+                <button mat-raised-button color="primary" (click)="addToCart(p)">Add to Cart</button>
               </div>
             </div>
           </div>
