@@ -1,53 +1,43 @@
+import { ProductFirebase } from './../models/product-firebase';
 import { ShoppingCartService } from './../services/shopping-cart.service';
-import { Product } from 'src/app/models/product';
 import { ProductService } from './../services/product.service';
-import { CategoryService } from './../services/category.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { take, switchMap } from 'rxjs/operators';
-import { ActivationEnd, ActivatedRoute } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css']
 })
-export class ProductsComponent implements OnInit, OnDestroy {
+export class ProductsComponent implements OnDestroy {
 
-  categories
-  products: any[] = [] //: Product[]
-  filteredProducts: any[]
-  activeCategory;
+  products: ProductFirebase[] = [] //: Product[]
+  filteredProducts: ProductFirebase[]
+  activeCategoryId;
   subs: Subscription[] = new Array;
 
   constructor(
-    private categoryService: CategoryService,
     private productService: ProductService,
     private route: ActivatedRoute,
     private cartService: ShoppingCartService
   ) {
-    this.subs.push(this.categoryService.getAll().pipe(take(1)).subscribe(c => 
-      this.categories = JSON.parse(JSON.stringify(c))
-    ))
-
     this.subs.push(this.productService.getAll() //first get all products
       .pipe(switchMap(products=>{
         this.products = JSON.parse(JSON.stringify(products))    
         return route.queryParamMap
       })) // and then get queryParams from ActivatedRoute and make filtering
       .subscribe(params => {
-        this.activeCategory = params.get('category')
-        
-        this.filteredProducts = this.activeCategory ?
-          this.products.filter(p=> p.payload.category === this.activeCategory) :
+        this.activeCategoryId = params.get('categoryId')
+
+        this.filteredProducts = this.activeCategoryId ? 
+          this.products.filter(p=> p.payload.category === this.activeCategoryId) :
           this.products
-        })
-      )
+      })
+    )
    }
-
-  ngOnInit(): void {
-
-  }
 
   ngOnDestroy(): void {
     this.subs.forEach(elem => {
@@ -55,16 +45,9 @@ export class ProductsComponent implements OnInit, OnDestroy {
     });
   }
 
-  setActiveCategory(category) {
-    this.activeCategory=category
-  }
-
   filterProducts(category): void {
     // this.filteredProducts = this.products.filter(p => p.payload.category===category)
   }
 
-  addToCart(product) {
-    this.cartService.create(product)
-  }
 
 }

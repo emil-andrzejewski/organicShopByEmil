@@ -1,0 +1,8 @@
+<div class="card" style="width: 25rem;">
+  <img [src]="product.payload.imageUrl" class="card-img-top">
+  <div class="card-body">
+    <h1 class="card-title">{{product.payload.title}}</h1>
+    <p class="card-text">{{ product.payload.price | currency:'EUR' }}</p>
+    <button mat-raised-button color="primary" (click)="addToCart(product)">Add to Cart</button>
+  </div>
+</div>

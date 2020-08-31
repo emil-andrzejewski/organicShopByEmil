@@ -1,33 +1,13 @@
-
-<!-- <ul>
-  <li *ngFor="let p of products">{{p.payload | json}}</li>
-</ul> -->
-
 <div class="row">
   <div class="col-md-2">
-    <div class="list-group sticky-top">
-      <a routerLink="/" class="list-group-item list-group-item-action" [class.active]="!activeCategory" >
-        All categories
-      </a>
-      <a *ngFor="let c of categories" routerLink="/" [queryParams]="{ category: c.key }" 
-        class="list-group-item list-group-item-action" [class.active]="activeCategory === c.key">
-        {{c.payload.title}}
-      </a>
-    </div>
+    <product-filter [categoryId]="activeCategoryId"></product-filter>
   </div>
   <div class="col-md-10">
     <div class="container" style="width: 100%;">
       <div class="row">
         <ng-container *ngFor="let p of filteredProducts; let i = index">
           <div class="col">
-            <div class="card" style="width: 25rem;">
-              <img [src]="p.payload.imageUrl" class="card-img-top">
-              <div class="card-body">
-                <h1 class="card-title">{{p.payload.title}}</h1>
-                <p class="card-text">{{ p.payload.price | currency:'EUR' }}</p>
-                <button mat-raised-button color="primary" (click)="addToCart(p)">Add to Cart</button>
-              </div>
-            </div>
+            <product-card [product]="p"></product-card>
           </div>
           <div *ngIf="i%2===1" class="w-100"></div>
         </ng-container>        
