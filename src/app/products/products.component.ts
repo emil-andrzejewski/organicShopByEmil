@@ -1,3 +1,4 @@
+import { ShoppingCart } from './../models/shopping-cart';
 import { ProductFirebase } from './../models/product-firebase';
 import { ShoppingCartService } from './../services/shopping-cart.service';
 import { ProductService } from './../services/product.service';
@@ -5,6 +6,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { switchMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { JsonPipe } from '@angular/common';
+import { jitOnlyGuardedExpression } from '@angular/compiler/src/render3/util';
 
 
 @Component({
@@ -12,12 +15,13 @@ import { Subscription } from 'rxjs';
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css']
 })
-export class ProductsComponent implements OnDestroy {
+export class ProductsComponent implements OnInit, OnDestroy {
 
   products: ProductFirebase[] = [] //: Product[]
   filteredProducts: ProductFirebase[]
   activeCategoryId;
   subs: Subscription[] = new Array;
+  shoppingCart: ShoppingCart; 
 
   constructor(
     private productService: ProductService,
@@ -39,14 +43,16 @@ export class ProductsComponent implements OnDestroy {
     )
    }
 
+  async ngOnInit() {
+    this.subs.push((await this.cartService.getCart()).subscribe(cart=>{
+      this.shoppingCart = (JSON.parse(JSON.stringify(cart))) as ShoppingCart
+    }))
+  }
+
   ngOnDestroy(): void {
     this.subs.forEach(elem => {
       if(elem) elem.unsubscribe()
     });
-  }
-
-  filterProducts(category): void {
-    // this.filteredProducts = this.products.filter(p => p.payload.category===category)
   }
 
 
