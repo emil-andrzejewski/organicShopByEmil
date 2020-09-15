@@ -1,7 +1,9 @@
+import { ProductFirebase } from './../models/product-firebase';
 import { Observable } from 'rxjs';
 import { Product } from './../models/product';
 import { AngularFireDatabase, SnapshotAction } from '@angular/fire/database';
 import { Injectable } from '@angular/core';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +16,12 @@ export class ProductService {
     this.db.list('/products').push(product);
   }
 
-  getAll(): Observable<SnapshotAction<Product>[]> {
-    return this.db.list('/products').snapshotChanges() as Observable<SnapshotAction<Product>[]>
+  getAll(): Observable<ProductFirebase[]> {
+    return this.db.list('/products').snapshotChanges().pipe(map(
+      products => JSON.parse(JSON.stringify(products))
+    ))
+    
+    //as Observable<SnapshotAction<Product>[]>
   }
 
   get(productId) {

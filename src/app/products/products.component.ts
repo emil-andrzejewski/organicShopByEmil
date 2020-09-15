@@ -1,4 +1,4 @@
-import { ShoppingCart } from './../models/shopping-cart';
+import { ShoppingCartFirebase } from '../models/shopping-cart-firebase';
 import { ProductFirebase } from './../models/product-firebase';
 import { ShoppingCartService } from './../services/shopping-cart.service';
 import { ProductService } from './../services/product.service';
@@ -6,8 +6,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { switchMap } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { JsonPipe } from '@angular/common';
-import { jitOnlyGuardedExpression } from '@angular/compiler/src/render3/util';
 
 
 @Component({
@@ -21,7 +19,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   filteredProducts: ProductFirebase[]
   activeCategoryId;
   subs: Subscription[] = new Array;
-  shoppingCart: ShoppingCart; 
+  shoppingCart: ShoppingCartFirebase; 
 
   constructor(
     private productService: ProductService,
@@ -30,7 +28,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   ) {
     this.subs.push(this.productService.getAll() //first get all products
       .pipe(switchMap(products=>{
-        this.products = JSON.parse(JSON.stringify(products))    
+        this.products = products;    
         return route.queryParamMap
       })) // and then get queryParams from ActivatedRoute and make filtering
       .subscribe(params => {
@@ -44,9 +42,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
    }
 
   async ngOnInit() {
-    this.subs.push((await this.cartService.getCart()).subscribe(cart=>{
-      this.shoppingCart = (JSON.parse(JSON.stringify(cart))) as ShoppingCart
-    }))
+    this.subs.push((await this.cartService.getCart()).subscribe(cart=> this.shoppingCart = cart))
   }
 
   ngOnDestroy(): void {

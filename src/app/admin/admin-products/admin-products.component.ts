@@ -22,11 +22,11 @@ export class AdminProductsComponent implements OnInit {
 
   ngOnInit(): void {
     this.productService.getAll().subscribe(products => {
-      this.products = new MatTableDataSource
+      this.products = new MatTableDataSource;
       products.forEach(elem => {
-        let p = elem.payload.toJSON()
+        let p = elem.payload;
         p['$key'] = elem.key
-        this.products.data.push(JSON.parse(JSON.stringify(p)))
+        this.products.data.push(p);
       });
       this.products.sort = this.sort
       this.products.paginator = this.paginator
