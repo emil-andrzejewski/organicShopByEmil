@@ -20,8 +20,6 @@ export class ProductService {
     return this.db.list('/products').snapshotChanges().pipe(map(
       products => JSON.parse(JSON.stringify(products))
     ))
-    
-    //as Observable<SnapshotAction<Product>[]>
   }
 
   get(productId) {

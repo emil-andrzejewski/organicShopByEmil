@@ -1,4 +1,4 @@
-import { ShoppingCart } from './../models/shopping-cart';
+import { ShoppingCartFirebase } from '../models/shopping-cart-firebase';
 import { ProductFirebase } from './../models/product-firebase';
 import { ShoppingCartService } from '../services/shopping-cart.service';
 import { Component, OnInit, Input } from '@angular/core';
@@ -10,7 +10,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ProductCardComponent implements OnInit {
   @Input('product') product: ProductFirebase
-  @Input('shopping-cart') shoppingCart: ShoppingCart
+  @Input('shopping-cart') shoppingCart: ShoppingCartFirebase
 
   constructor(
     private cartService: ShoppingCartService
