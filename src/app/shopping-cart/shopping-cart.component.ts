@@ -11,7 +11,7 @@ import { ShoppingCartFirebase } from '../models/shopping-cart-firebase';
 })
 export class ShoppingCartComponent implements OnInit, OnDestroy {
 items: {[key: string] : ShoppingCartItem} ; //: ShoppingCartItem[] = [];
-displayedColumns: string[] = ['productName', 'quantity', 'unitPrice', 'price'];
+displayedColumns: string[] = ['thumbnail', 'productName', 'quantity', 'unitPrice', 'price'];
 cart: ShoppingCartFirebase;
 subs: Subscription[] = [];
 
