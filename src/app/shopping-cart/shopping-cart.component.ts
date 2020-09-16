@@ -20,7 +20,7 @@ subs: Subscription[] = [];
   async ngOnInit() {
     this.subs.push((await this.cartService.getCart()).subscribe(cart => {
       this.cart = cart;
-      this.items = cart.payload.items;
+      this.items = cart.items;
     }))
   }
 

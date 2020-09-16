@@ -1,57 +1,55 @@
 
+import { ShoppingCartService } from '../services/shopping-cart.service';
 import { ShoppingCartItem } from './shopping-cart-item';
 
 
 export class ShoppingCartFirebase {
-  key: string; //id of shopping cart
-  payload: { 
-    items: { [key: string]: ShoppingCartItem } 
+  private key: string; //id of shopping cart
+  private payload: { 
+    items: { [key: string]: ShoppingCartItem }
   };
-  type: string;
 
   constructor({ key, payload, type }) {
     this.key=key;
     this.payload = payload;
-    this.type = type;
+  }
+
+  get cartId() {
+    return this.key
+  }
+  
+  get items() {
+    return this.payload.items;
   }
 
   get totalItemsNumber() {
     let count = 0;
-    let items = this.payload.items;
-    for(let itemId in items) {
-      count+= items[itemId].quantity;
+    for(let itemId in this.items) {
+      count+= this.items[itemId].quantity;
     }
     return count;
   }
 
-  get items() {
-    let items: ShoppingCartItem[] = [];
-    for(let itemId in this.payload.items) {
-      items.push(this.payload.items[itemId])
-    }
-    return items;
-  }
-
   get totalCost() {
-    if(this.totalItemsNumber===0) return 0
+    if(!this.items) return 0
 
-    let cost = 0;
-    this.items.forEach(item => {
-      cost+= item.product.price * item.quantity;
-    });
-    return cost;
+    let totalCost = 0;
+    for(let itemId in this.items) {
+      totalCost+=this.items[itemId].product.price * this. items[itemId].quantity
+    }
+    return totalCost;
   }
 
   get itemKeys() {
-    if(!this.payload.items) return [];
+    if(!this.items) return [];
 
-    return Object.keys(this.payload.items);
+    return Object.keys(this.items);
   }
 
   getQuantity(productId: string) {
-    if(!this.payload.items) return 0;
+    if(!this.items) return 0;
 
-    let itemInCart = this.payload.items[productId]
+    let itemInCart = this.items[productId]
     return itemInCart ? itemInCart.quantity : 0
   }
   
