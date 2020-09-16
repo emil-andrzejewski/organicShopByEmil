@@ -22,15 +22,15 @@ export class ProductService {
     ))
   }
 
-  get(productId) {
-    return this.db.object('/products/'+productId).valueChanges()
+  get(productId: string): Observable<Product> {
+    return this.db.object('/products/' + productId).valueChanges() as Observable<Product>
   }
 
-  update(productId,product) {
-    return this.db.object('/products/'+productId).update(product)
+  update(productId: string, product: Product): Promise<void> {
+    return this.db.object('/products/' + productId).update(product)
   }
 
-  remove(productId) {
-    return this.db.object('/products/'+productId).remove()
+  remove(productId: string): Promise<void> {
+    return this.db.object('/products/' + productId).remove()
   }
 }

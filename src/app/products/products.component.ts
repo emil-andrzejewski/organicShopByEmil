@@ -15,17 +15,17 @@ import { Subscription, Observable } from 'rxjs';
 })
 export class ProductsComponent implements OnInit, OnDestroy {
 
-  products: ProductFirebase[] = [] 
+  products: ProductFirebase[] = []
   filteredProducts: ProductFirebase[]
   activeCategoryId;
   subs: Subscription[] = new Array;
-  cart$: Observable<ShoppingCartFirebase>; 
+  cart$: Observable<ShoppingCartFirebase>;
 
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute,
     private cartService: ShoppingCartService
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.cart$ = await this.cartService.getCart();
@@ -34,14 +34,14 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subs.forEach(elem => {
-      if(elem) elem.unsubscribe()
+      if (elem) elem.unsubscribe()
     });
   }
 
   private populateProducts() {
     this.subs.push(this.productService.getAll() //first get all products
-      .pipe(switchMap(products=>{
-        this.products = products;    
+      .pipe(switchMap(products => {
+        this.products = products;
         return this.route.queryParamMap
       })) // and then get queryParams from ActivatedRoute and make filtering
       .subscribe(params => {
@@ -52,9 +52,9 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
 
   private applyFilter() {
-    this.filteredProducts = this.activeCategoryId ? 
-    this.products.filter(p=> p.payload.category === this.activeCategoryId) :
-    this.products
+    this.filteredProducts = this.activeCategoryId ?
+      this.products.filter(p => p.payload.category === this.activeCategoryId) :
+      this.products
   }
 
 

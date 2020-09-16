@@ -15,8 +15,11 @@ export class ShoppingCartService {
   async getCart(): Promise<Observable<ShoppingCartFirebase>> {
     let cartId = await this.getOrCreateCartId();
     return this.db.object('/shopping-carts/' + cartId).snapshotChanges().pipe(
-      map(cart => new ShoppingCartFirebase(JSON.parse(JSON.stringify(cart))))
-    );
+      map(cart => {
+        let newCart = new ShoppingCartFirebase(JSON.parse(JSON.stringify(cart)));
+        return newCart;
+      })
+    )
   }
 
   async addToCart(product: ProductFirebase) {
@@ -44,9 +47,9 @@ export class ShoppingCartService {
     let cartId = localStorage.getItem('cartId')
     if (cartId) return cartId
 
-    let result = await this.create()
-    localStorage.setItem('cartId', result.key)
-    return result.key
+    let cart = await this.create()
+    localStorage.setItem('cartId', cart.key)
+    return cart.key
   }
 
   private getItem(cartId, productId): AngularFireObject<ShoppingCartItem> {
@@ -57,7 +60,7 @@ export class ShoppingCartService {
     let cartId = await this.getOrCreateCartId();
     let item = this.getItem(cartId, product.key)
     item.valueChanges().pipe(take(1)).subscribe(it => {
-      if (!it) item.set({ product: product.payload, quantity: 1 });
+      if (!it) item.set(new ShoppingCartItem({ product: product.payload, quantity: 1 }));
     })
   }
 
@@ -66,7 +69,7 @@ export class ShoppingCartService {
     let item = this.getItem(cartId, productId)
     item.valueChanges().pipe(take(1)).subscribe(it => {
       let quantity = it.quantity + change;
-      if(quantity===0) item.remove();
+      if (quantity === 0) item.remove();
       else item.update({ quantity: it.quantity + change })
     })
   }

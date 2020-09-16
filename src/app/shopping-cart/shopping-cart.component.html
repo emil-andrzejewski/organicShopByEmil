@@ -47,7 +47,7 @@
     <!-- Price Column = unit price * quantity-->
     <ng-container matColumnDef="price">
       <th class="text-right" mat-header-cell *matHeaderCellDef> Price </th>
-      <td class="text-right" mat-cell *matCellDef="let key"> {{items[key].product.price * items[key].quantity | number:'1.2-2'}} € </td>
+      <td class="text-right" mat-cell *matCellDef="let key"> {{items[key].totalPrice | number:'1.2-2'}} € </td>
       <td class="text-right" mat-footer-cell *matFooterCellDef> {{ cart.totalCost | number:'1.2-2' }} € </td>
     </ng-container>
 
