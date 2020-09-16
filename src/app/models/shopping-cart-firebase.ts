@@ -1,13 +1,11 @@
 
-import { ShoppingCartService } from '../services/shopping-cart.service';
 import { ShoppingCartItem } from './shopping-cart-item';
 
 
 export class ShoppingCartFirebase {
   key: string; //id of shopping cart
   payload: { 
-    items: { [key: string]: ShoppingCartItem }
-    // itemsMap: ShoppingCartItem[] 
+    items: { [key: string]: ShoppingCartItem } 
   };
   type: string;
 
@@ -20,7 +18,7 @@ export class ShoppingCartFirebase {
   get totalItemsNumber() {
     let count = 0;
     let items = this.payload.items;
-    for(let itemId in this.payload.items) {
+    for(let itemId in items) {
       count+= items[itemId].quantity;
     }
     return count;
@@ -35,14 +33,26 @@ export class ShoppingCartFirebase {
   }
 
   get totalCost() {
-    if(this.items.length===0) return 0
+    if(this.totalItemsNumber===0) return 0
 
-    let totalCost = 0;
+    let cost = 0;
     this.items.forEach(item => {
-      totalCost+= item.product.price * item.quantity;
+      cost+= item.product.price * item.quantity;
     });
+    return cost;
+  }
 
-    return totalCost;
+  get itemKeys() {
+    if(!this.payload.items) return [];
+
+    return Object.keys(this.payload.items);
+  }
+
+  getQuantity(productId: string) {
+    if(!this.payload.items) return 0;
+
+    let itemInCart = this.payload.items[productId]
+    return itemInCart ? itemInCart.quantity : 0
   }
   
 }

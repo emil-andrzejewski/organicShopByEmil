@@ -10,28 +10,22 @@ import { ShoppingCartFirebase } from '../models/shopping-cart-firebase';
   styleUrls: ['./shopping-cart.component.css']
 })
 export class ShoppingCartComponent implements OnInit, OnDestroy {
-items: ShoppingCartItem[] = []
+items: {[key: string] : ShoppingCartItem} ; //: ShoppingCartItem[] = [];
 displayedColumns: string[] = ['productName', 'quantity', 'unitPrice', 'price'];
-cart$: Observable<ShoppingCartFirebase>
-subs: Subscription[] = new Array;
+cart: ShoppingCartFirebase;
+subs: Subscription[] = [];
 
   constructor(private cartService: ShoppingCartService) { }
 
   async ngOnInit() {
-    this.cart$ = await this.cartService.getCart();
-    this.subs.push(this.cart$.subscribe(cart => {
-      this.items = cart.items;
+    this.subs.push((await this.cartService.getCart()).subscribe(cart => {
+      this.cart = cart;
+      this.items = cart.payload.items;
     }))
   }
 
-  getTotalCost(): number {
-    let totalCost = 0;
-    this.subs.push(this.cart$.subscribe(cart => totalCost = cart.totalCost));
-    return totalCost
-  }
-
   clearCart(): void {
-
+    this.cartService.clearCart();
   }
 
   ngOnDestroy(): void {

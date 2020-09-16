@@ -4,27 +4,14 @@
     <h1 class="card-title">{{product.payload.title}}</h1>
     <p class="card-text">{{ product.payload.price | currency:'EUR' }}</p>
   </div>
-  <div class="card-footer">
+  <div class="card-footer" *ngIf="shoppingCart">
     <button mat-raised-button color="primary" style="width: 100%;" (click)="addToCart()"
-      *ngIf="getQuantity()===0; else quantityEdition">
+      *ngIf="shoppingCart.getQuantity(product.key)===0; else quantityEdition">
       Add to Cart
     </button>
     <ng-template #quantityEdition>
-      <div class="row no-gutters">
-        <div class="col-2">
-          <button class="btn btn-secondary btn-block" style="float: left;" (click)="takeFromCart()">-</button>
-        </div>
-        <div class="col text-center">
-          {{ getQuantity() }} in cart
-        </div>
-        <div class="col-2">
-          <button class="btn btn-secondary btn-block" style="float: right;" (click)="addToCart()">+</button>    
-        </div>
-      </div>      
+      <product-quantity [productId]="product.key" [shopping-cart]="shoppingCart">
+      </product-quantity>
     </ng-template>
-  </div>
-  
-  <div >
-    
   </div>
 </div>
