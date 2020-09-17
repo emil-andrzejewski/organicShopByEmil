@@ -16,8 +16,8 @@ export class BsNavbarComponent implements OnInit, OnDestroy {
   isLogged: boolean = false;
   sub: Subscription;
   appUser: AppUser;
-  shoppingCartItemsNumber: number = 2;
   cart$: Observable<ShoppingCartFirebase>;
+  isExpanded: boolean = false;
 
   constructor(
     private auth: AuthService,
@@ -40,6 +40,10 @@ export class BsNavbarComponent implements OnInit, OnDestroy {
 
   logout() {
     this.auth.logout();
+  }
+
+  toggle() {
+    this.isExpanded = !this.isExpanded;
   }
 
 
